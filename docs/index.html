@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Email Form</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="styles.css" rel="stylesheet" />
+    <link href="../dist/main.css" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="form">
+        <div class="form__body">
+          <div class="form__header">Share <b>Board name</b> with others</div>
+          <div class="form__input">
+            <div id="emails-input"></div>
+          </div>
+        </div>
+        <div class="form__footer">
+          <button id="add-btn" class="form__btn">Add email</button>
+          <button id="count-btn" class="form__btn">
+            Get emails count
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../dist/main.js"></script>
+    <script>
+      function randomText(size = 3) {
+        return Math.random().toString(36).substr(2, size);
+      }
+
+      var inputContainerNode = document.querySelector("#emails-input");
+      var options = [
+        "john@miro.com",
+        "invalid.email",
+        "mike@miro.com",
+        "alexander@miro.com",
+      ];
+      var emailsInput = EmailsInput(inputContainerNode, options);
+
+      var countBtn = document.querySelector("#count-btn");
+      countBtn.addEventListener("click", function () {
+        alert(emailsInput.get().length);
+      });
+
+      var addBtn = document.querySelector("#add-btn");
+      addBtn.addEventListener("click", function () {
+        emailsInput.add(
+          randomText(6) + "@" + randomText(4) + "." + randomText(2)
+        );
+      });
+    </script>
+  </body>
+</html>
