@@ -156,10 +156,10 @@ function createEmailItem({ id, text, valid }, onRemove) {
 
 function EmailsInput(container, initialOptions) {
   var getId;
-  var options;
-  var subscribers = [];
   var inner;
   var input;
+  var options = [];
+  var subscribers = [];
 
   function setOptions(nextOptions) {
     options = nextOptions;
@@ -218,7 +218,7 @@ function EmailsInput(container, initialOptions) {
     }
   }
 
-  function handleInnerClick() {
+  function handleContainerClick() {
     input.focus();
   }
 
@@ -248,7 +248,7 @@ function EmailsInput(container, initialOptions) {
 
     container.innerHTML = "";
     container.classList.add("email-input");
-    container.addEventListener("click", handleInnerClick);
+    container.addEventListener("click", handleContainerClick);
     render(inner, container);
   }
 
