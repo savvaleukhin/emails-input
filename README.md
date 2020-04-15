@@ -10,8 +10,11 @@ Delivered as two separate files:
 
 ### Usage
 
-Download component `dist` folder
+Download component `dist` folder.
 Copy files to your project public folder.
+
+If you are «creepy guy» you can use this component right from the `src`.
+The component is written in ES5 style to be compatible with IE 11.
 
 In HTML:
 
