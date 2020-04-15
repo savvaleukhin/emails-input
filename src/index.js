@@ -96,9 +96,8 @@ function render(node, container, before) {
   }
 }
 
-function getOptionsFromText(text, getId) {
-  var options = text
-    .split(",")
+function getOptionsFromArray(inputArr, getId) {
+  var options = inputArr
     .map(function (item) {
       return item.trim();
     })
@@ -109,6 +108,22 @@ function getOptionsFromText(text, getId) {
       return { id: getId(), valid: validateEmail(item), text: item };
     });
   return options;
+}
+
+function getOptionsFromText(text, getId) {
+  return getOptionsFromArray(text.split(","), getId);
+}
+
+function getOptionsFromInput(input, getId) {
+  if (isString(input)) {
+    return getOptionsFromText(input, getId);
+  }
+
+  if (Array.isArray(input)) {
+    return getOptionsFromArray(input, getId);
+  }
+
+  throw new TypeError("Invalid input");
 }
 
 function createEmailItem({ id, text, valid }, onRemove) {
@@ -151,29 +166,24 @@ function EmailsInput(container, initialOptions) {
     setTimeout(notifySubscribers, 0, subscribers, options);
   }
 
-  function init(initialOptions = []) {
+  function init(initialOptions) {
     getId = makeGetId();
-    setOptions(
-      initialOptions.map(function (text) {
-        return {
-          id: getId(),
-          valid: validateEmail(text),
-          text,
-        };
-      })
-    );
+    var newOptions = getOptionsFromInput(initialOptions, getId);
+    setOptions(newOptions);
   }
 
-  function addOptions(textInput) {
-    var newOptions = getOptionsFromText(textInput, getId);
-    setOptions([...options, ...newOptions]);
-    render(
-      newOptions.map(function (o) {
-        return createEmailItem(o, handleRemove);
-      }),
-      inner,
-      input
-    );
+  function addOptions(userInput) {
+    var newOptions = getOptionsFromInput(userInput, getId);
+    if (newOptions.length > 0) {
+      setOptions([...options, ...newOptions]);
+      render(
+        newOptions.map(function (o) {
+          return createEmailItem(o, handleRemove);
+        }),
+        inner,
+        input
+      );
+    }
   }
 
   function removeOption(removableId, ref) {
@@ -232,13 +242,13 @@ function EmailsInput(container, initialOptions) {
       type: "div",
       props: {
         class: "email-input__inner",
-        onClick: handleInnerClick,
         children: innerChildren,
       },
     });
 
     container.innerHTML = "";
     container.classList.add("email-input");
+    container.addEventListener("click", handleInnerClick);
     render(inner, container);
   }
 
